@@ -16,21 +16,7 @@ def normalize_priority(p):
 
     return "⭐" * n
 
-'''
-MONGO_URI = "mongodb+srv://travel_user:travel_password@cluster0.xfuukvm.mongodb.net/?appName=Cluster0"
-
-@st.cache_resource
-def get_collection():
-    MONGO_URI = os.environ.get("MONGO_URI")
-    client = MongoClient(MONGO_URI)
-    #    "mongodb+srv://falemanno_db_user:rRNEUas0X4OdJRcE@cluster0.xfuukvm.mongodb.net/"
-    #)
-    db = client['Travel_Plans']
-    return db['Trips']
-
-collection = get_collection()
-'''
-os.environ["MONGO_URI"] = "mongodb+srv://travel_user:travel_password@cluster0.xfuukvm.mongodb.net/?appName=Cluster0"
+#os.environ["MONGO_URI"] = "mongodb+srv://travel_user:travel_password@cluster0.xfuukvm.mongodb.net/?appName=Cluster0"
 # -------------------------------
 # Legge la variabile d'ambiente MONGO_URI
 # -------------------------------
