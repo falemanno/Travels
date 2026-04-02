@@ -16,21 +16,6 @@ def normalize_priority(p):
 
     return "⭐" * n
 
-'''
-MONGO_URI = "mongodb+srv://travel_user:travel_password@cluster0.xfuukvm.mongodb.net/?appName=Cluster0"
-
-@st.cache_resource
-def get_collection():
-    MONGO_URI = os.environ.get("MONGO_URI")
-    client = MongoClient(MONGO_URI)
-    #    "mongodb+srv://falemanno_db_user:rRNEUas0X4OdJRcE@cluster0.xfuukvm.mongodb.net/"
-    #)
-    db = client['Travel_Plans']
-    return db['Trips']
-
-collection = get_collection()
-'''
-os.environ["MONGO_URI"] = "mongodb+srv://travel_user:travel_password@cluster0.xfuukvm.mongodb.net/?appName=Cluster0"
 # -------------------------------
 # Legge la variabile d'ambiente MONGO_URI
 # -------------------------------
@@ -74,16 +59,25 @@ def normalize(doc):
         except ValueError:
             durata = None
 
+    p = doc.get("priorità", 1)
+
+    if isinstance(p, int):
+        priorità_vis = "⭐" * p
+    elif isinstance(p, str):
+        priorità_vis = normalize_priority(p)  # usa la tua funzione
+    else:
+        priorità_vis = "⭐"   
+
     return {
         "_id": doc["_id"],
         "Destinazione": doc.get("destinazione", ""),
         "Durata (giorni)": durata,
-        "Periodo": doc.get("periodo", ""),
+        "Periodo": ", ".join(doc.get("periodo_migliore", [])),
         "Budget (€)": doc.get("budget", "€"),
         #"Budget (€)": f"{doc.get('budget', {}).get('min','')} – {doc.get('budget', {}).get('max','')}",
         "Tipologia": doc.get("tipo_viaggio",""),
         "Stato": doc.get("stato",""),
-        "Priorità": doc.get("priorità_vis", ""),
+        "Priorità": priorità_vis,
         "Note": doc.get("note", "")
     }
 
@@ -199,7 +193,7 @@ priority_options = ["⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐�
 current_priority = normalize_priority(row["Priorità"])
 
 budget_options = ["€", "€€", "€€€"]
-current_budget = row.get("Budget", "€")
+current_budget = row.get("Budget (€)", "€")
 
 with st.form("edit_trip"):
     destinazione = st.text_input(
@@ -251,7 +245,7 @@ if submitted_edit:
         "durata_media_giorni": int(durata),
         "periodo_migliore": periodo,
         "budget": budget,
-        "priorità": priorità_vis,
+        "priorità": len(priorità_vis),
         "note": note,
     }
 
