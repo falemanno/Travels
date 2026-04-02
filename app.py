@@ -75,8 +75,8 @@ def normalize(doc):
         "Periodo": ", ".join(doc.get("periodo_migliore", [])),
         "Budget (€)": doc.get("budget", "€"),
         #"Budget (€)": f"{doc.get('budget', {}).get('min','')} – {doc.get('budget', {}).get('max','')}",
-        "Tipologia": doc.get("tipo_viaggio",""),
-        "Stato": doc.get("stato",""),
+        # "Tipologia": doc.get("tipo_viaggio",""),
+        # "Stato": doc.get("stato",""),
         "Priorità": priorità_vis,
         "Note": doc.get("note", "")
     }
